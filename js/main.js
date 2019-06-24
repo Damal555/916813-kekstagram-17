@@ -9,8 +9,27 @@ var NAME = ['Добрята', 'Шеломоха', 'Пофистал', 'Перк�
 var amount = 25;
 var photos = [];
 
+var step = 0.25;
+var scale = 1;
+
 var userPictureTemplate = document.querySelector('#picture').content;
 var picturesList = document.querySelector('.pictures');
+
+var uploadFile = document.querySelector('#upload-file');
+var uploadCancel = document.querySelector('#upload-cancel');
+var fileOverlay = document.querySelector('.img-upload__overlay');
+var imgPreview = document.querySelector('.img-upload__preview');
+var scaleControl = document.querySelector('.scale__control--value');
+var scaleControlBigger = document.querySelector('.scale__control--bigger');
+var scaleControlSmaller = document.querySelector('.scale__control--smaller');
+var imgPreviewEffects = document.querySelector('.img-upload__preview img');
+var effectsList = document.querySelector('.effects__list');
+var sliderPoint = document.querySelector('.effect-level__pin');
+var levelValue = document.querySelector('.effect-level__value');
+var levelSlider = document.querySelector('.img-upload__effect-level');
+var levelLine = document.querySelector('.effect-level__line');
+var levelDepth = document.querySelector('.effect-level__depth');
+
 
 function createRandomNumber(parameter) {
   var randomNumber = Math.floor(Math.random() * parameter);
@@ -56,3 +75,126 @@ function insertFragment() {
   picturesList.appendChild(fragment);
 }
 insertFragment();
+
+//    Личный проект: подробности
+
+function showPictureEdit() {
+  uploadFile.addEventListener('change', function () {
+    fileOverlay.classList.remove('hidden');
+    scaleControl.value = '100%';
+    imgPreview.style.transform = 'scale(1)';
+  });
+}
+showPictureEdit();
+
+function closedPictureEdit() {
+  uploadCancel.addEventListener('click', function () {
+    fileOverlay.classList.add('hidden');
+    uploadFile.value = '';
+  });
+}
+closedPictureEdit();
+// Масштабирование
+
+function changeScaleSmaller() {
+  if (scale <= 1 && scale > 0.25) {
+    scale = scale - step;
+    imgPreview.style.transform = 'scale(' + scale + ')';
+    scaleControl.value = scale * 100 + '%';
+  }
+}
+function decrease() {
+  changeScaleSmaller();
+}
+
+function changeScaleBigger() {
+  if (scale >= 0.25 && scale < 1) {
+    scale = scale + step;
+    imgPreview.style.transform = 'scale(' + scale + ')';
+    scaleControl.value = scale * 100 + '%';
+  }
+}
+function increase() {
+  changeScaleBigger();
+}
+
+function changingScale() {
+  scaleControlSmaller.addEventListener('mouseup', decrease);
+  scaleControlBigger.addEventListener('mouseup', increase);
+}
+changingScale();
+
+// Наложение эффектов
+
+function initEffectchange() {
+  effectsList.addEventListener('click', function () {
+    var effectType = document.querySelector('input.effects__radio:checked').value;
+    imgPreviewEffects.classList = '';
+    imgPreviewEffects.classList.add('effects__preview--' + effectType);
+    sliderPoint.style.left = '100%';
+    levelDepth.style.width = '100%';
+    levelValue.value = 100;
+    changeEffectValue(100);
+  });
+}
+initEffectchange();
+//   Изменение уроня эффектов
+
+function levelEffects() {
+  var sliderX = levelLine.getBoundingClientRect().left;
+  var mouseX = event.pageX;
+  var levelLineWdt = levelLine.offsetWidth;
+  var sliderPointCoordinate = (mouseX - sliderX) / levelLineWdt * 100;
+  if (sliderPointCoordinate <= 0) {
+    sliderPointCoordinate = 1;
+  }
+  if (sliderPointCoordinate >= 100) {
+    sliderPointCoordinate = 100;
+  }
+  sliderPoint.style.left = sliderPointCoordinate + '%';
+  levelDepth.style.width = sliderPointCoordinate + '%';
+  levelValue.value = Math.round(sliderPointCoordinate);
+  return sliderPointCoordinate;
+}
+
+function moviePoint() {
+  levelSlider.addEventListener('mouseup', function () {
+    var perc = levelEffects();
+    changeEffectValue(perc);
+  });
+}
+moviePoint();
+
+function hideSlider() {
+  levelSlider.classList.add('hidden');
+}
+hideSlider();
+
+function showSlider() {
+  levelSlider.classList.remove('hidden');
+}
+
+function changeEffectValue(perc) {
+  var effectType = document.querySelector('input.effects__radio:checked').value;
+  showSlider();
+  if (effectType === 'none') {
+    hideSlider();
+    imgPreviewEffects.classList = '';
+    imgPreviewEffects.style.filter = '';
+  }
+  if (effectType === 'chrome') {
+    imgPreviewEffects.style.filter = 'grayscale(' + perc / 100 + ')';
+  }
+  if (effectType === 'sepia') {
+    imgPreviewEffects.style.filter = 'sepia(' + perc / 100 + ')';
+  }
+  if (effectType === 'marvin') {
+    imgPreviewEffects.style.filter = 'invert(' + perc + '%' + ')';
+  }
+  if (effectType === 'phobos') {
+    imgPreviewEffects.style.filter = 'blur(' + perc / 100 * 3 + 'px' + ')';
+  }
+  if (effectType === 'heat') {
+    imgPreviewEffects.style.filter = 'brightness(' + (1 + perc / 100 * 2) + ')';
+  }
+}
