@@ -29,7 +29,9 @@ var levelValue = document.querySelector('.effect-level__value');
 var levelSlider = document.querySelector('.img-upload__effect-level');
 var levelLine = document.querySelector('.effect-level__line');
 var levelDepth = document.querySelector('.effect-level__depth');
-
+var flag = false;
+var ESC_KEYCODE = 27;
+var textArea = document.querySelector('.img-upload__text textarea');
 
 function createRandomNumber(parameter) {
   var randomNumber = Math.floor(Math.random() * parameter);
@@ -79,21 +81,27 @@ insertFragment();
 //    Личный проект: подробности
 
 function showPictureEdit() {
-  uploadFile.addEventListener('change', function () {
-    fileOverlay.classList.remove('hidden');
-    scaleControl.value = '100%';
-    imgPreview.style.transform = 'scale(1)';
-  });
+  fileOverlay.classList.remove('hidden');
+  scaleControl.value = '100%';
+  imgPreview.style.transform = 'scale(1)';
+  document.addEventListener('keydown', closeOnEsc);
 }
-showPictureEdit();
+function initPictureEditShowing() {
+  uploadFile.addEventListener('change', showPictureEdit);
+}
+initPictureEditShowing();
+initPictureEditHiding();
 
-function closedPictureEdit() {
-  uploadCancel.addEventListener('click', function () {
-    fileOverlay.classList.add('hidden');
-    uploadFile.value = '';
-  });
+function initPictureEditHiding() {
+  uploadCancel.addEventListener('click', closePictureEdit);
 }
-closedPictureEdit();
+
+uploadCancel.addEventListener('click', closePictureEdit);
+
+function closePictureEdit() {
+  fileOverlay.classList.add('hidden');
+  uploadFile.value = '';
+}
 // Масштабирование
 
 function changeScaleSmaller() {
@@ -196,5 +204,28 @@ function changeEffectValue(perc) {
   }
   if (effectType === 'heat') {
     imgPreviewEffects.style.filter = 'brightness(' + (1 + perc / 100 * 2) + ')';
+  }
+}
+// Комментарии
+
+function addFlagChangerOnFocus() {
+  textArea.addEventListener('focus', function () {
+    flag = true;
+  });
+}
+
+function addFlagChangerOnBlur() {
+  textArea.addEventListener('blur', function () {
+    flag = false;
+  });
+}
+
+addFlagChangerOnFocus();
+addFlagChangerOnBlur();
+
+function closeOnEsc(evt) {
+  if (!flag && evt.keyCode === ESC_KEYCODE) {
+    closePictureEdit();
+    document.removeEventListener('keydown', closeOnEsc);
   }
 }
