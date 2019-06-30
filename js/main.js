@@ -164,14 +164,30 @@ function levelEffects() {
   levelValue.value = Math.round(sliderPointCoordinate);
   return sliderPointCoordinate;
 }
+levelSlider.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoords = levelLine.getBoundingClientRect().left;
 
-function moviePoint() {
-  levelSlider.addEventListener('mouseup', function () {
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = startCoords - moveEvt.clientX;
+
+    startCoords = moveEvt.clientX;
     var perc = levelEffects();
     changeEffectValue(perc);
-  });
-}
-moviePoint();
+    sliderPoint.style.left = (sliderPoint.offsetLeft - shift) + 'px';
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    onMouseMove(upEvt);
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 
 function hideSlider() {
   levelSlider.classList.add('hidden');
