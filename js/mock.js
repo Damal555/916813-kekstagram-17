@@ -5,8 +5,16 @@
   var NAME = ['Добрята', 'Шеломоха', 'Пофистал', 'Перкосрак ', 'Рахель', 'Дафна', 'Захава', 'Ядрен', 'Батон', 'Ястер', 'Мордухай', 'Джозефина'];
 
   window.mock = {
-    picturesList: document.querySelector('.pictures')
+    picturesList: document.querySelector('.pictures'),
+    createDOMElements: function (i, photos) {
+      var pictureElement = userPictureTemplate.cloneNode(true);
+      pictureElement.querySelector('.picture__img').src = photos[i].url;
+      pictureElement.querySelector('.picture__likes').textContent = photos[i].likes;
+      pictureElement.querySelector('.picture__comments').textContent = photos[i].comments.length;
+      return pictureElement;
+    }
   };
+
 
   var amount = 25;
   var photos = [];
@@ -40,19 +48,10 @@
   }
   photos = createRandomData();
 
-  function createDOMElements(i) {
-    var pictureElement = userPictureTemplate.cloneNode(true);
-
-    pictureElement.querySelector('.picture__img').src = photos[i].url;
-    pictureElement.querySelector('.picture__likes').textContent = photos[i].likes;
-    pictureElement.querySelector('.picture__comments').textContent = photos[i].comments.length;
-    return pictureElement;
-  }
-
   function insertFragment() {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < amount; i++) {
-      fragment.appendChild(createDOMElements(i));
+      fragment.appendChild(window.mock.createDOMElements(i, photos));
     }
     window.mock.picturesList.appendChild(fragment);
   }
