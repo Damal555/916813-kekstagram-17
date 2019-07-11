@@ -9,13 +9,20 @@
 
   var close = window.mock.picturesList.querySelector('#upload-cancel');
 
+  var hashtag = window.form.pictureEdit.querySelector('.text__hashtags');
   var textarea = window.form.pictureEdit.querySelector('.text__description');
 
   var flag = false;
   textarea.addEventListener('focus', function () {
     flag = true;
   });
+  hashtag.addEventListener('focus', function () {
+    flag = true;
+  });
   textarea.addEventListener('blur', function () {
+    flag = true;
+  });
+  hashtag.addEventListener('blur', function () {
     flag = false;
   });
 

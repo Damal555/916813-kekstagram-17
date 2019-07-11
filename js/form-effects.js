@@ -16,6 +16,7 @@
     }
     window.form.img.classList = '';
     window.form.img.classList.add('effects__preview--' + event.target.value);
+    resetPin();
     changeStyle();
   }
 
@@ -27,6 +28,7 @@
     evt.preventDefault();
     slider.removeEventListener('mousemove', onMouseMovePin);
     slider.removeEventListener('mouseup', onMouseUpPin);
+    slider.removeEventListener('mouseleave', onMouseUpPin);
     movePin(evt);
     changeStyle();
   }
@@ -41,21 +43,28 @@
     evt.preventDefault();
     slider.addEventListener('mousemove', onMouseMovePin);
     slider.addEventListener('mouseup', onMouseUpPin);
+    slider.addEventListener('mouseleave', onMouseUpPin);
 
   }
 
   function movePin(evt) {
     var pos = evt.pageX - slider.getBoundingClientRect().left + pageXOffset;
-    if (pos <= 0) {
-      pos = 1;
+    if (pos <= 18) {
+      pos = 18;
     }
-    pos /= 4.62;
-    if (pos > 100) {
-      pos = 100;
+    pos -= 18;
+    if (pos > 455) {
+      pos = 455;
     }
-    sliderPin.style.left = pos + '%';
-    sliderDepth.style.width = pos + '%';
-    sliderInput.value = pos;
+    sliderPin.style.left = pos + 'px';
+    sliderDepth.style.width = pos + 'px';
+    sliderInput.value = pos / 4.55;
+  }
+
+  function resetPin() {
+    sliderPin.style.left = '455px';
+    sliderDepth.style.width = '455px';
+    sliderInput.value = 100;
   }
 
   slider.addEventListener('mousedown', onMouseDownPin);
