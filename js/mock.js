@@ -6,24 +6,12 @@
 
   window.mock = {
     picturesList: document.querySelector('.pictures'),
-    createDOMElements: function (arr, index) {
+    createDOMElements: function (i, photos) {
       var pictureElement = userPictureTemplate.cloneNode(true);
-      pictureElement.querySelector('.picture__img').src = arr[index].url;
-      pictureElement.querySelector('.picture__likes').textContent = arr[index].likes;
-      pictureElement.querySelector('.picture__comments').textContent = arr[index].comments.length;
+      pictureElement.querySelector('.picture__img').src = photos[i].url;
+      pictureElement.querySelector('.picture__likes').textContent = photos[i].likes;
+      pictureElement.querySelector('.picture__comments').textContent = photos[i].comments.length;
       return pictureElement;
-    },
-    insertFragment: function (amount, child, photos) {
-      var fragment = document.createDocumentFragment();
-      photos = createRandomData();
-      for (var i = 0; i < amount; i++) {
-        if (!child) {
-          fragment.appendChild(window.mock.createDOMElements(photos, i));
-        } else {
-          fragment.appendChild(child[i]);
-        }
-      }
-      window.mock.picturesList.appendChild(fragment);
     }
   };
 
@@ -58,6 +46,15 @@
     }
     return photos;
   }
-  window.mock.insertFragment(amount);
+  photos = createRandomData();
+
+  function insertFragment() {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < amount; i++) {
+      fragment.appendChild(window.mock.createDOMElements(i, photos));
+    }
+    window.mock.picturesList.appendChild(fragment);
+  }
+  insertFragment();
 
 })();
