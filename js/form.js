@@ -4,7 +4,8 @@
   window.form = {
     uploadFile: window.mock.picturesList.querySelector('#upload-file'),
     pictureEdit: window.mock.picturesList.querySelector('.img-upload__overlay'),
-    img: window.mock.picturesList.querySelector('.img-upload__preview img')
+    img: window.mock.picturesList.querySelector('.img-upload__preview img'),
+    form: document.querySelector('.img-upload__form')
   };
 
   var close = window.mock.picturesList.querySelector('#upload-cancel');
@@ -20,14 +21,20 @@
     flag = true;
   });
   textarea.addEventListener('blur', function () {
-    flag = true;
+    flag = false;
   });
   hashtag.addEventListener('blur', function () {
     flag = false;
   });
 
+  function openEditor() {
+    window.form.pictureEdit.classList.remove('hidden');
+    document.addEventListener('keydown', escClose);
+    window.formPreview.addCustomPicture();
+  }
 
   function closeEditor() {
+    window.form.form.reset();
     window.form.pictureEdit.classList.add('hidden');
     document.removeEventListener('keydown', escClose);
     window.form.uploadFile.value = '';
@@ -39,11 +46,7 @@
     }
   }
 
-  close.addEventListener('click', closeEditor);
 
-  window.form.uploadFile.addEventListener('change', function () {
-    window.form.pictureEdit.classList.remove('hidden');
-    document.addEventListener('keydown', escClose);
-    window.formPreview.addCustomPicture();
-  });
+  window.form.uploadFile.addEventListener('change', openEditor);
+  close.addEventListener('click', closeEditor);
 })();

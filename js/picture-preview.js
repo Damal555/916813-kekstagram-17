@@ -14,6 +14,10 @@
   var comments = picture.querySelector('.comments-count');
   var description = picture.querySelector('.social__caption');
 
+  var num = picture.querySelector('.social__comment-count');
+  var load = picture.querySelector('.comments-loader');
+  load.addEventListener('click', showMoreComments);
+
 
   function fillPicture(data, index) {
     var serverData = data[index];
@@ -22,22 +26,30 @@
     comments.textContent = serverData.comments.length;
     description.textContent = serverData.description;
     addComments(serverData.comments);
-    picture.querySelector('.social__comment-count').classList.add('visually-hidden');
-    picture.querySelector('.comments-loader').classList.add('visually-hidden');
   }
 
-  function addComments(comments) {
+  function addComments(commentsArr) {
+    num.classList.remove('visually-hidden');
+    load.classList.remove('visually-hidden');
     var fragment = document.createDocumentFragment();
     var template = picture.querySelector('.social__comment');
     var target = picture.querySelector('.social__comments');
-    comments.forEach(function (elem) {
+    commentsArr.forEach(function (elem, index) {
       var example = template.cloneNode(true);
       example.querySelector('.social__picture').src = elem.avatar;
       example.querySelector('.social__text').textContent = elem.message;
+      if (index >= 5) {
+        example.classList.add('visually-hidden');
+      }
       fragment.appendChild(example);
     });
     target.innerHTML = '';
     target.appendChild(fragment);
+
+    if (comments.length <= 5) {
+      num.classList.add('visually-hidden');
+      load.classList.add('visually-hidden');
+    }
   }
 
   function addCloseListeners() {
@@ -57,6 +69,22 @@
   function escClose(evt) {
     if (evt.keyCode === 27) {
       closePicture();
+    }
+  }
+
+  function showMoreComments() {
+    var hidden = picture.querySelector('.social__comments').querySelectorAll('.visually-hidden');
+
+    hidden.forEach(function (elem, index) {
+      if (index < 5) {
+        elem.classList.remove('visually-hidden');
+      }
+    });
+
+    if (!Array.from(hidden[hidden.length - 1].classList).includes('visually-hidden')) {
+      num.classList.add('visually-hidden');
+      load.classList.add('visually-hidden');
+      return;
     }
   }
 

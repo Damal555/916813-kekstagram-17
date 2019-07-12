@@ -83,7 +83,7 @@
       });
   }
   function showAllImages(source) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < source.length; i++) {
       source[i].classList.remove('hidden');
     }
   }
@@ -91,7 +91,6 @@
   function changeShownImages(filter) {
     var images = window.mock.picturesList.getElementsByClassName('picture');
     showAllImages(images);
-
     if (filter === 'filter-popular') {
       images = sort(images, 1);
     }
