@@ -28,13 +28,13 @@
     addComments(serverData.comments);
   }
 
-  function addComments(comments) {
+  function addComments(commentsArr) {
     num.classList.remove('visually-hidden');
     load.classList.remove('visually-hidden');
     var fragment = document.createDocumentFragment();
     var template = picture.querySelector('.social__comment');
     var target = picture.querySelector('.social__comments');
-    comments.forEach(function (elem, index) {
+    commentsArr.forEach(function (elem, index) {
       var example = template.cloneNode(true);
       example.querySelector('.social__picture').src = elem.avatar;
       example.querySelector('.social__text').textContent = elem.message;

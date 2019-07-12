@@ -25,7 +25,7 @@
         isFailed = true;
         custom = 'Тэг не может состоять только из \"#\"!';
       }
-      if (elem.indexOf('#') != 0) {
+      if (elem.indexOf('#') !== 0) {
         isFailed = true;
         custom = 'Тэги должны начинаться с символа \"#\"!';
       }
