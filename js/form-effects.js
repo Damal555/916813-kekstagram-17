@@ -75,6 +75,9 @@
     var type = document.querySelector('input.effects__radio:checked').value;
     var perc = sliderInput.value;
     var change = window.form.pictureEdit.querySelector('.effects__preview--' + type);
+    if (type === 'none') {
+      change.style.filter = '';
+    }
     if (type === 'chrome') {
       change.style.filter = 'grayscale(' + Math.round(perc) + '%)';
     }
