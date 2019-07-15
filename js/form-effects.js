@@ -91,7 +91,7 @@
       change.style.filter = 'blur(' + 3 * perc / 100 + 'px)';
     }
     if (type === 'heat') {
-      change.style.filter = 'brightness(' + 1 + 2 * perc / 100 + ')';
+      change.style.filter = 'brightness(' + (1 + 2 * perc / 100) + ')';
     }
   }
 

@@ -40,8 +40,6 @@
       isFailed = true;
       custom = 'Тегов не может быть больше 5-ти!';
     }
-    if (isFailed) {
-      hashtags.setCustomValidity(custom);
-    }
+    hashtags.setCustomValidity(custom);
   }
 })();

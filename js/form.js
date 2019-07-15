@@ -38,6 +38,7 @@
     window.form.pictureEdit.classList.add('hidden');
     document.removeEventListener('keydown', escClose);
     window.form.uploadFile.value = '';
+    window.formResize.init();
   }
 
   function escClose(evt) {
