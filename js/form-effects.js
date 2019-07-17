@@ -2,11 +2,14 @@
 (function () {
 
 
+  var SLIDER_WIDTH = 455;
+  var SLIDER_PIN_WIDTH = 18;
   var effects = Array.from(window.form.pictureEdit.querySelectorAll('.effects__radio'));
   var slider = window.form.pictureEdit.querySelector('.img-upload__effect-level');
   var sliderDepth = window.form.pictureEdit.querySelector('.effect-level__depth');
   var sliderPin = window.form.pictureEdit.querySelector('.effect-level__pin');
   var sliderInput = window.form.pictureEdit.querySelector('.effect-level__value');
+  sliderInput.value = 100;
   slider.classList.add('hidden');
 
   function setEffect() {
@@ -16,7 +19,7 @@
     }
     window.form.img.classList = '';
     window.form.img.classList.add('effects__preview--' + event.target.value);
-    resetPin();
+    setPinValue(SLIDER_WIDTH);
     changeStyle();
   }
 
@@ -48,23 +51,30 @@
   }
 
   function movePin(evt) {
-    var pos = evt.pageX - slider.getBoundingClientRect().left + pageXOffset;
-    if (pos <= 18) {
-      pos = 18;
+    // pin position, PX
+    var pinPosition = evt.pageX - slider.getBoundingClientRect().left + pageXOffset;
+
+    // не даем пину уехать за слайдер
+    if (pinPosition <= SLIDER_PIN_WIDTH) {
+      pinPosition = SLIDER_PIN_WIDTH;
     }
-    pos -= 18;
-    if (pos > 455) {
-      pos = 455;
+    pinPosition -= SLIDER_PIN_WIDTH;
+    // теперь мышью мы двигаем центр пина а не его край
+
+    if (pinPosition > SLIDER_WIDTH) {
+      pinPosition = SLIDER_WIDTH;
     }
-    sliderPin.style.left = pos + 'px';
-    sliderDepth.style.width = pos + 'px';
-    sliderInput.value = pos / 4.55;
+    setPinValue(pinPosition);
   }
 
-  function resetPin() {
-    sliderPin.style.left = '455px';
-    sliderDepth.style.width = '455px';
-    sliderInput.value = 100;
+  function setPinValue(valInPX) {
+    // визуально двигаем слайдер на pinposition пикселей
+    sliderPin.style.left = valInPX + 'px';
+    sliderDepth.style.width = valInPX + 'px';
+    // добавляем значение в процентах в инпут для формы и вычисления глубины эффекта
+    // таким образом мы получаем значение слайдера в процентах по формуле процент = значение/максимум*100
+    var percentFromSlider = valInPX / SLIDER_WIDTH * 100;
+    sliderInput.value = percentFromSlider;
   }
 
   slider.addEventListener('mousedown', onMouseDownPin);

@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var AMOUNT_OF_HIDDEN_PICTURES = 15;
+  var TIME_OF_DEBOUNCE_MS = 500;
 
   window.filter = {
     filters: document.querySelector('.img-filters'),
@@ -9,8 +11,8 @@
     }
   };
 
+
   var currentFilter = '';
-  var amountOfHiddenPicts = 15;
 
   function debounce(callback) {
     var lastTimeout = null;
@@ -21,7 +23,7 @@
       }
       lastTimeout = window.setTimeout(function () {
         callback.apply(null, parameters);
-      }, 500);
+      }, TIME_OF_DEBOUNCE_MS);
     };
   }
 
@@ -38,12 +40,20 @@
     addIndexToImage();
   }
 
+  // function addIndexToImage() {
+  //   var img = window.mock.picturesList.getElementsByClassName('picture');
+  //   for (var i = 0; i < img.length; i++) {
+  //     img[i].order = i + 1;
+  //   }
+  // }
+
   function addIndexToImage() {
-    var img = window.mock.picturesList.getElementsByClassName('picture');
-    for (var i = 0; i < img.length; i++) {
-      img[i].order = i + 1;
-    }
+    var img = window.mock.picturesList.querySelectorAll('.picture');
+    img.forEach(function (elem, number) {
+      elem.order = number + 1;
+    });
   }
+
 
   function generateRandomNumbers(amount, max) {
     var temp = [];
@@ -82,10 +92,12 @@
         return temp;
       });
   }
+
   function showAllImages(source) {
-    for (var i = 0; i < source.length; i++) {
-      source[i].classList.remove('hidden');
-    }
+    source = Array.from(source);
+    source.forEach(function (elem) {
+      elem.classList.remove('hidden');
+    });
   }
 
   function changeShownImages(filter) {
@@ -96,7 +108,7 @@
     }
 
     if (filter === 'filter-new') {
-      images = sort(images, 2, generateRandomNumbers(amountOfHiddenPicts, 24));
+      images = sort(images, 2, generateRandomNumbers(AMOUNT_OF_HIDDEN_PICTURES, 24));
     }
 
     if (filter === 'filter-discussed') {

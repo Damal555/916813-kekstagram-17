@@ -9,7 +9,6 @@
       return;
     }
     tags = tags.split(' ');
-    var isFailed = false;
     var custom = '';
     tags.forEach(function (elem, index) {
       if (elem === '') {
@@ -17,27 +16,24 @@
         return;
       }
       elem.toLowerCase();
-      if (elem.length > 20) {
-        isFailed = true;
+      var tagLength = elem.length;
+      if (tagLength > 20) {
         custom = 'Максимальная длина тега - 20 символов, включая \"#\"!';
       }
-      if (elem.length < 2) {
-        isFailed = true;
+      if (tagLength < 2) {
         custom = 'Тэг не может состоять только из \"#\"!';
       }
       if (elem.indexOf('#') !== 0) {
-        isFailed = true;
         custom = 'Тэги должны начинаться с символа \"#\"!';
       }
       for (var i = 0; i < index; i++) {
         if (elem === tags[i]) {
-          isFailed = true;
           custom = 'Теги не должны повторяться!';
         }
       }
     });
-    if (tags.length > 5) {
-      isFailed = true;
+    var amountOfTags = tags.length;
+    if (amountOfTags > 5) {
       custom = 'Тегов не может быть больше 5-ти!';
     }
     hashtags.setCustomValidity(custom);
