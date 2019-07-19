@@ -28,24 +28,18 @@
   }
 
   function addListenersToFilters() {
-    var filterButtons = window.filter.filters.querySelectorAll('.img-filters__button');
+    var filterButtons = Array.from(window.filter.filters.querySelectorAll('.img-filters__button'));
     filterButtons.forEach(function (elem) {
-      elem.addEventListener('click', function () {
+      var displayMode = elem;
+      displayMode.addEventListener('click', function () {
         window.filter.filters.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
-        event.target.classList.add('img-filters__button--active');
-        currentFilter = event.target.id;
+        displayMode.classList.add('img-filters__button--active');
+        currentFilter = displayMode.id;
         debounce(changeShownImages(currentFilter));
       });
     });
     addIndexToImage();
   }
-
-  // function addIndexToImage() {
-  //   var img = window.mock.picturesList.getElementsByClassName('picture');
-  //   for (var i = 0; i < img.length; i++) {
-  //     img[i].order = i + 1;
-  //   }
-  // }
 
   function addIndexToImage() {
     var img = window.mock.picturesList.querySelectorAll('.picture');

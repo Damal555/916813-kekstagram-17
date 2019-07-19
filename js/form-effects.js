@@ -1,9 +1,8 @@
 'use strict';
 (function () {
-
-
   var SLIDER_WIDTH = 455;
   var SLIDER_PIN_WIDTH = 18;
+
   var effects = Array.from(window.form.pictureEdit.querySelectorAll('.effects__radio'));
   var slider = window.form.pictureEdit.querySelector('.img-upload__effect-level');
   var sliderDepth = window.form.pictureEdit.querySelector('.effect-level__depth');
@@ -12,19 +11,24 @@
   sliderInput.value = 100;
   slider.classList.add('hidden');
 
-  function setEffect() {
+  function setEffect(target) {
     slider.classList.remove('hidden');
-    if (event.target.value === 'none') {
+    if (target.value === 'none') {
       slider.classList.add('hidden');
     }
     window.form.img.classList = '';
-    window.form.img.classList.add('effects__preview--' + event.target.value);
+    window.form.img.classList.add('effects__preview--' + target.value);
     setPinValue(SLIDER_WIDTH);
     changeStyle();
   }
 
-  for (var i = 0; i < effects.length; i++) {
-    effects[i].addEventListener('change', setEffect);
+  addEffectsListeners();
+  function addEffectsListeners() {
+    effects.forEach(function (elem) {
+      elem.addEventListener('change', function () {
+        setEffect(elem);
+      });
+    });
   }
 
   function onMouseUpPin(evt) {
@@ -105,5 +109,12 @@
     }
   }
 
-
+  window.form.uploadFile.addEventListener('change', resetForm);
+  function resetForm() {
+    window.form.form.reset();
+    window.form.img.classList = ('effects__preview--none');
+    window.form.img.style.filter = '';
+    slider.classList.add('hidden');
+    document.querySelector('input.effects__radio#effect-none').checked = true;
+  }
 })();

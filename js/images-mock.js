@@ -6,6 +6,7 @@
     NAME: ['Добрята', 'Шеломоха', 'Пофистал', 'Перкосрак ', 'Рахель', 'Дафна', 'Захава', 'Ядрен', 'Батон', 'Ястер', 'Мордухай', 'Джозефина']
   };
   var AMOUNT_OF_MOCK_PHOTOS = 25;
+
   window.mock = {
     picturesList: document.querySelector('.pictures'),
     createDOMElements: function (arr, index) {
